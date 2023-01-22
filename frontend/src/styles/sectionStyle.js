@@ -63,6 +63,7 @@ export const ListSectionStyle = styled.section`
     color: #ffffff;
     display: flex;
     flex-direction: column;
+    filter: ${({editContainer}) => editContainer && "blur(2px)"};
 
     .container-user{
         width: 640px;
@@ -101,6 +102,10 @@ export const ListSectionStyle = styled.section`
         width: 120px;
         align-items: center;
         justify-content: space-evenly;
+    }
+
+    .container-action{
+        cursor: pointer;
     }
 
     .icon-action{

@@ -62,16 +62,18 @@ export const LoginStyle = styled.main`
         height: 50px;
         width: 180px;
         border: none;
-        text-align: center;
+        color: #ffffff;
         margin-left: auto;
         margin-right: auto;
+        text-align: center;
         border-radius: 10px;
         font-size: 16px;
-        color: #ffffff;
         font-weight: bold;
         margin-top: 40px;
         cursor: pointer;
     }
+
+    
 
     .link-login{
         text-align: center;
@@ -94,4 +96,8 @@ export const RegisterStyle = styled(LoginStyle)`
     .button-form{
         margin-top: 15px;
     }
+
+    /* .button-form:hover{
+        background-color: ${({registerButtonColor}) => registerButtonColor ? "#345EEA" : "#00ff00"};
+    } */
 `

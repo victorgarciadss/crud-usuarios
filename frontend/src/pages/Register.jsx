@@ -1,10 +1,15 @@
 import { CloseButton } from "../components/CloseButton";
 import { RegisterStyle } from "../styles/FormStyle";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRef } from 'react';
 import { IMaskInput } from 'react-imask';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+import { GlobalContext } from '../CreateContext';
+
+import axios from 'axios';
+
 
 
 export const Register = () => {
@@ -14,26 +19,22 @@ export const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     
-
     const [messagePhone, setMessagePhone] = useState("");
     const [messageEmail, setEmailMessage] = useState("");
     const [passwordMessage, setPasswordMessage] = useState("");
 
+    const navigate = useNavigate();
+    const { setShowMessage } = useContext(GlobalContext);
 
-    const changeMessagePhone = () => {
+
+    const checkPhone = () => {
         if(phone.length < 15){
-            setMessagePhone("Você deve inserir seu número completo com DDD");  
+            setMessagePhone("Você deve inserir seu número completo com DDD");
+            return false;
         }
         else{
             setMessagePhone("");
         }
-    }
-
-    
-
-    const handleChange = (e) => {
-        // console.log(e.target.value);
-        setPhone(e.target.value);
     }
 
     const checkEmail = () => {
@@ -42,6 +43,7 @@ export const Register = () => {
 
         if(!result){
             setEmailMessage("Email inválido!!");
+            return false;
         }
         else{
             setEmailMessage("");
@@ -54,17 +56,42 @@ export const Register = () => {
 
         if(!result){
             setPasswordMessage("Senha fraca! Deve haver pelo menos 8 caracteres, uma letra e um número");
+            return false;
         }
         else{
             setPasswordMessage("");
         }
     }
 
+    const RegisterUser = (e) => {
+        e.preventDefault();
+
+
+        if(messagePhone === "" && messageEmail === "" && passwordMessage === ""){
+
+            axios.post("http://localhost:5000/register", {
+                name: e.target.name.value,
+                phone: e.target.phone.value,
+                email: e.target.email.value,
+                password: e.target.password.value,
+            })
+            .then(response => {
+                console.log(response);
+                setShowMessage(true);
+                navigate("/");
+            })
+            .catch(err => {
+                console.log(err);    
+            })
+        }
+
+        else{
+            alert("Insira todos os dados corretamente antes de cadastrar!");
+        }
+
+        
+    }
     
-        
-        
-    // const ref = useRef(null);
-    const inputRef = useRef(null);
     
     return(
         <RegisterStyle>
@@ -75,8 +102,8 @@ export const Register = () => {
 
                 <form
                     className="form-items"
-                    // onSubmit={registerUser}
-                    action="/"
+                    onSubmit={RegisterUser}
+                    action="/register"
                     method="post"
                 >
                     <div>
@@ -108,9 +135,9 @@ export const Register = () => {
                             // inputRef={inputRef}
                             placeholder="(xx) 90000-0000"
                             // value={phone}
-                            onChange={handleChange}
-                            onBlur={changeMessagePhone}
-                            
+                            onChange={(e) => setPhone(e.target.value)}
+                            onBlur={checkPhone}
+                            required
                         />
                         <br />
                         <span  className="alert-message">
@@ -131,6 +158,7 @@ export const Register = () => {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             onBlur={checkEmail}
+                            required
                         />
                         <br />
                         <span className="alert-message">{messageEmail}</span>
@@ -147,14 +175,18 @@ export const Register = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             onBlur={checkPassword}
+                            required
                         />
                         <br />
                         <span className="alert-message">{passwordMessage}</span>
                     </div>
 
+                    
                     <button className="button-form">
                         CADASTRAR
                     </button>
+                    
+                    
 
                 </form>
 

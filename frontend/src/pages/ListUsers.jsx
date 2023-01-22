@@ -3,32 +3,85 @@ import { ListSectionStyle } from "../styles/sectionStyle";
 
 import { BiPencil } from "react-icons/bi";
 import { MdDeleteOutline } from 'react-icons/md';
+import { useCallback, useEffect, useState, useContext } from "react";
 
-const dataUser = [
-    {
-        id: 1,
-        name: "Victor Garcia",
-        phone: "(51) 90000-0000",
-        email: "gmail@gmail.com"
-    },
-    {
-        id: 2, 
-        name: "Fulano de tal",
-        phone: "(33) 90000-0000",
-        email: "fulano@gmail.com"
-    }
-]
+import axios from 'axios';
+import { EditUser } from "../components/EditUser";
 
+import { GlobalContext } from '../CreateContext';
+import { CorrectMessage } from "../components/CorrectMessage";
+
+import { DeleteUser } from "../components/DeleteUser";
 
 
 export const ListUsers = () => {
 
-    return(
+    const { showMessage, confirm } = useContext(GlobalContext);
+    const { editContainer, setEditContainer} = useContext(GlobalContext);
+
+    const [usersList, setUsersList] = useState([]);
+    const [editId, setEditId] = useState(null);
+    const [deleteMessage, setDeleteMessage] = useState(false);
+    const [deleteId, setDeleteId] = useState(null);
+    const [modalConfirm, setModalConfirm] = useState(false);
+    
+
+    useEffect(() => {
+        axios.get("http://localhost:5000/")
+            .then(response => {
+                setUsersList(response.data);
+            })
+            .catch(err => console.log(err));
+    }, []);
+
+    const handleEdit = useCallback((id) => {
+        setEditContainer(true);
+        setEditId(id);
+    }, [setEditContainer]);
+
+    const user = usersList.find(user => user.id === editId);
+
+    const handleDelete = useCallback((id) => {
+        setDeleteId(id);
+        setDeleteMessage(true);
+        setModalConfirm(true);
+    }, [])
+    
+    return (
         <>
             <HeaderCheck />
 
-            <ListSectionStyle>
-                {dataUser.map((item) => (
+            {showMessage && <CorrectMessage action={"atualizado"} />}
+            {confirm && <CorrectMessage action={"excluído"} />}
+            
+            {deleteMessage &&
+                 <DeleteUser
+                    id={deleteId}
+                    user={usersList}
+                    setUsers={setUsersList}
+                    modalConifrm={modalConfirm}
+                    setModalConfirm={setModalConfirm}
+                />
+            }
+
+            {editContainer && usersList &&
+                <>
+                    <EditUser
+                        key={user.id}
+                        usersList={usersList}
+                        setUsersList={setUsersList}
+                        id={user.id}
+                        name={user.name}
+                        phone={user.phone}
+                        email={user.email}
+                    />
+                    
+                </>
+
+            }
+
+            <ListSectionStyle editContainer={editContainer}>
+                {usersList && usersList.map((item) => (
                     <div
                         key={item.id}
                         className="container-user"
@@ -49,19 +102,29 @@ export const ListUsers = () => {
                         </div>
 
                         <aside className="container-actions">
-                            <div>
+                            <div 
+                                className="container-action"
+                                onClick={() => handleEdit(item.id)}
+                            >
                                 <BiPencil className="icon-action" />
                                 <p>Editar</p>
                             </div>
 
-                            <div> 
-                                <MdDeleteOutline className="icon-action"/>
+                            
+
+                            <div 
+                                className="container-action"
+                                onClick={() =>handleDelete(item.id)}
+                            >
+                                <MdDeleteOutline className="icon-action" />
                                 <p>Excluir</p>
                             </div>
-                            
+
                         </aside>
                     </div>
                 ))}
+
+
             </ListSectionStyle>
         </>
     );
