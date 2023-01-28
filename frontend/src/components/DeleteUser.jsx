@@ -10,8 +10,6 @@ export const DeleteUser = ({ id, setUsers, modalConifrm, ...props }) => {
     const { setConfirm } = useContext(GlobalContext);
     
 
-    console.log(id);
-
     // const { showMessage } = useContext(GlobalContext);
 
     const confirmDelete = () => {

@@ -5,7 +5,10 @@ import { useContext } from "react";
 
 export const CorrectMessage = ({ action }) => {
 
-    const { showMessage, setShowMessage, confirm, setConfirm } = useContext(GlobalContext);
+    const { showMessage, setShowMessage,
+            confirm, setConfirm,
+            authMessage, setAuthMessage
+        } = useContext(GlobalContext);
     
     if(showMessage){
         setTimeout(() => {
@@ -17,6 +20,12 @@ export const CorrectMessage = ({ action }) => {
     if(confirm){
         setTimeout(() => {
             setConfirm(false);
+        }, 3000);
+    }
+
+    if(authMessage){
+        setTimeout(() => {
+            setAuthMessage(false);
         }, 3000);
     }
 

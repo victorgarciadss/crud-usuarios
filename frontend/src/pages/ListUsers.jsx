@@ -12,6 +12,7 @@ import { GlobalContext } from '../CreateContext';
 import { CorrectMessage } from "../components/CorrectMessage";
 
 import { DeleteUser } from "../components/DeleteUser";
+import { useNavigate } from "react-router-dom";
 
 
 export const ListUsers = () => {
@@ -24,6 +25,17 @@ export const ListUsers = () => {
     const [deleteMessage, setDeleteMessage] = useState(false);
     const [deleteId, setDeleteId] = useState(null);
     const [modalConfirm, setModalConfirm] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const currentTime = new Date();
+        const expirationTime = new Date(localStorage.getItem("timeexp") * 1000);
+
+        if(currentTime > expirationTime){
+            navigate("/");
+        }
+    }, [navigate]);
     
 
     useEffect(() => {
@@ -32,7 +44,7 @@ export const ListUsers = () => {
                 setUsersList(response.data);
             })
             .catch(err => console.log(err));
-    }, []);
+    }, [setUsersList]);
 
     const handleEdit = useCallback((id) => {
         setEditContainer(true);
@@ -80,7 +92,7 @@ export const ListUsers = () => {
 
             }
 
-            <ListSectionStyle editContainer={editContainer}>
+            <ListSectionStyle editContainer={editContainer} modalConfirm={modalConfirm}>
                 {usersList && usersList.map((item) => (
                     <div
                         key={item.id}

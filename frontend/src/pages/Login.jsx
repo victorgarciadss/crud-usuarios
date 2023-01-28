@@ -1,17 +1,74 @@
 import { LoginStyle } from "../styles/FormStyle";
 
-
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CloseButton } from "../components/CloseButton";
+import { useContext, useState } from "react";
+
+import axios from 'axios';
+import { GlobalContext } from "../CreateContext";
 
 
 export const Login = () => {
 
     
 
-    
-    return(
+    const { setAuthMessage, setUser } = useContext(GlobalContext);
+
+    const [valueEmail, setValueEmail] = useState("");
+    const [valuePassword, setValuePassword] = useState("");
+
+
+
+    const navigate = useNavigate();
+
+
+
+    const sendLogin = (e) => {
+        e.preventDefault();
+
+
+        axios.post("http://localhost:5000/login", {
+            email: e.target.email.value,
+            password: e.target.password.value
+        })
+            .then(response => {
+                // setUser(response.data);
+                
+                setAuthMessage(true);
+
+                const token = response.data.token;
+                localStorage.setItem("token", token);
+                localStorage.setItem("name", response.data.name);
+
+
+                axios.get("http://localhost:5000/private", {
+                    headers: {
+                        authorization: token
+                    }
+                })
+                    .then(response => {
+                        console.log(response.data);
+                        // setAuth(true);
+                        const name = localStorage.getItem("name");
+                        setUser(name);
+                        navigate("/");
+                        localStorage.setItem("timeexp", response.data.userData.exp);
+
+                    })
+                    .catch(err => console.log(err));
+
+
+            })
+            .catch(error => {
+                console.log(error);
+                alert(error.response.data.error);
+            });
+
+
+    }
+
+
+    return (
         <LoginStyle >
 
 
@@ -20,9 +77,9 @@ export const Login = () => {
             <main className="form-container">
                 <h1 className="form-title">Login</h1>
 
-                <form className="form-items" action="/" method="post">
+                <form className="form-items" method="post" onSubmit={sendLogin}>
                     <div>
-    
+
                         <label htmlFor="email">Email</label>
                         <br />
                         <input
@@ -31,9 +88,11 @@ export const Login = () => {
                             id="email"
                             className="input-form"
                             placeholder="Digite aqui seu email"
+                            value={valueEmail}
+                            onChange={(e) => setValueEmail(e.target.value)}
                         />
                         <br />
-                        <span className="alert-message"></span>
+                        
                     </div>
 
                     <div>
@@ -45,9 +104,10 @@ export const Login = () => {
                             id="password"
                             className="input-form"
                             placeholder="Digite aqui sua senha"
+                            value={valuePassword}
+                            onChange={(e) => setValuePassword(e.target.value)}
                         />
                         <br />
-                        <span className="alert-message"></span>
                     </div>
 
                     <button className="button-form">

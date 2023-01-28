@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const SectionStyle = styled.section`
-    /* background-color: #00ff00; */
     
     .welcome-container{
         margin-top: 30px;
@@ -30,7 +29,6 @@ export const SectionStyle = styled.section`
         margin-top: 2rem;
         width: 500px;
         height: 204px;
-        /* border: 2px solid black; */
         margin-left: auto;
         margin-right: auto;
         display: flex;
@@ -63,7 +61,7 @@ export const ListSectionStyle = styled.section`
     color: #ffffff;
     display: flex;
     flex-direction: column;
-    filter: ${({editContainer}) => editContainer && "blur(2px)"};
+    filter: ${({editContainer, modalConfirm}) => (editContainer || modalConfirm) && "blur(2px)"};
 
     .container-user{
         width: 640px;

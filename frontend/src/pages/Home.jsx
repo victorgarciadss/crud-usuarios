@@ -11,15 +11,38 @@ import { CorrectMessage } from "../components/CorrectMessage";
 
 
 export const Home = () => {
-    const { showMessage } = useContext(GlobalContext);
-    console.log(showMessage);
+
+    const { showMessage, authMessage, user, setUser } = useContext(GlobalContext);
+    
+
+    const checkLogin = () => {
+
+        const currentTime = new Date();
+        const expirationTime = new Date(localStorage.getItem("timeexp") * 1000);
+
+        
+
+        if(user === null){
+            alert("Faça Login antes de visualizar os usuários cadastrados!!");
+        }  
+        
+        else{
+            if(currentTime > expirationTime){
+                setUser(null);
+                alert("Seu tempo de login expirou!! Faça Login novamente");
+            }
+        }
+        
+    }
 
     return(
         <>
-            <Header />
-            {/* <HeaderCheck /> */}
+
+            {user !== null ? <HeaderCheck /> : <Header />}
+            
 
             {showMessage && <CorrectMessage action={"cadastrado"}/>}
+            {authMessage && <CorrectMessage action={"fez login"} />}
 
             <SectionStyle>
                 
@@ -33,7 +56,7 @@ export const Home = () => {
                 </div>
 
                 <div className="action-options">
-                    <Link to={"/listagem"}>
+                    <Link onClick={checkLogin} to={user !== null ? "/listagem": null}>
                         <Button>Listar</Button>
                     </Link>
                     

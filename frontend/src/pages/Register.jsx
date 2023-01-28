@@ -30,7 +30,6 @@ export const Register = () => {
     const checkPhone = () => {
         if(phone.length < 15){
             setMessagePhone("Você deve inserir seu número completo com DDD");
-            return false;
         }
         else{
             setMessagePhone("");
@@ -43,7 +42,6 @@ export const Register = () => {
 
         if(!result){
             setEmailMessage("Email inválido!!");
-            return false;
         }
         else{
             setEmailMessage("");
@@ -56,7 +54,6 @@ export const Register = () => {
 
         if(!result){
             setPasswordMessage("Senha fraca! Deve haver pelo menos 8 caracteres, uma letra e um número");
-            return false;
         }
         else{
             setPasswordMessage("");
@@ -131,8 +128,6 @@ export const Register = () => {
                             placeholderChar={'#'}
                             className="input-form"
                             unmask={true}
-                            // ref={ref}
-                            // inputRef={inputRef}
                             placeholder="(xx) 90000-0000"
                             // value={phone}
                             onChange={(e) => setPhone(e.target.value)}
