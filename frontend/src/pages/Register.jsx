@@ -129,7 +129,6 @@ export const Register = () => {
                             className="input-form"
                             unmask={true}
                             placeholder="(xx) 90000-0000"
-                            // value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             onBlur={checkPhone}
                             required
@@ -138,8 +137,6 @@ export const Register = () => {
                         <span  className="alert-message">
                             {messagePhone}
                         </span>
-                        
-                        
                     </div>
                         
                     <div>
@@ -181,8 +178,7 @@ export const Register = () => {
                         CADASTRAR
                     </button>
                     
-                    
-
+                  
                 </form>
 
                 <Link className="link-login" to={"/login"}>

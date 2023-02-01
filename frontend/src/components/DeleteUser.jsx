@@ -8,9 +8,7 @@ import { CorrectMessageStyle } from '../styles/CorrectMessageStyle';
 export const DeleteUser = ({ id, setUsers, modalConifrm, ...props }) => {
 
     const { setConfirm } = useContext(GlobalContext);
-    
 
-    // const { showMessage } = useContext(GlobalContext);
 
     const confirmDelete = () => {
         setConfirm(true);
@@ -35,18 +33,18 @@ export const DeleteUser = ({ id, setUsers, modalConifrm, ...props }) => {
                     <section className='container-confirm'>
                         <p>Você tem certeza que deseja fazer isso?</p>
                         <div className='container-button'>
-                            <button className='button' onClick={() => props.setModalConfirm(false)}>Voltar</button>
-                            <button className='button' onClick={confirmDelete}>Confirmar</button>
+                            <button className='button' onClick={() => props.setModalConfirm(false)}>
+                                Voltar
+                            </button>
+
+                            <button className='button' onClick={confirmDelete}>
+                                Confirmar
+                            </button>
                         </div>
                     </section>
                 </ContainerDeleteStyle>
-
             )}
-
         </>
-
-
     )
-
 
 }

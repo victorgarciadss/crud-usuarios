@@ -1,8 +1,7 @@
-import { useEffect, useState, useContext } from "react"
+import { useState, useContext } from "react"
 import { ContainerEditStyle } from "../styles/ContainerModalStyle";
 
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 
 import { GlobalContext } from '../CreateContext';
 
@@ -17,10 +16,7 @@ export const EditUser = (props) => {
         email: props.email
     });
 
-    console.log(editValues.id);
 
-
-    const navigate = useNavigate();
     const { setShowMessage } = useContext(GlobalContext);
     const { editContainer, setEditContainer } = useContext(GlobalContext);
 

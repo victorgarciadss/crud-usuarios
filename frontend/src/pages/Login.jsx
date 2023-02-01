@@ -1,8 +1,9 @@
+import { useContext, useState } from "react";
 import { LoginStyle } from "../styles/FormStyle";
 
 import { Link, useNavigate } from "react-router-dom";
 import { CloseButton } from "../components/CloseButton";
-import { useContext, useState } from "react";
+
 
 import axios from 'axios';
 import { GlobalContext } from "../CreateContext";
@@ -32,7 +33,6 @@ export const Login = () => {
             password: e.target.password.value
         })
             .then(response => {
-                // setUser(response.data);
                 
                 setAuthMessage(true);
 
@@ -48,7 +48,6 @@ export const Login = () => {
                 })
                     .then(response => {
                         console.log(response.data);
-                        // setAuth(true);
                         const name = localStorage.getItem("name");
                         setUser(name);
                         navigate("/");
